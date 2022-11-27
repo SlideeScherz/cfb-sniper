@@ -34,19 +34,16 @@ Sub fetchScores()
 
   Set webpage = ie.document
   Set mtbl = webpage.getElementsByTagName("table")
-  Set table_data = mtbl.getElementsByTagName("tr")
+  'Set table_data = mtbl.getElementsByTagName("tr")
   
   Dim numGames As Integer
   numGames = Len(mtbl)
   
-  
-
   Debug.Print "fetched"; numGames; "elements"
-  
-  For Count = 0 To numGames
-    Debug.Print mtbl.Item(Count).Children(0).innerText
-  Next Count   
-  
+
+  For Each game in mtbl
+    Debug.Print game.Children(1).innerText
+  Next game
   
   
   ' NOTE: this is all for one game.
