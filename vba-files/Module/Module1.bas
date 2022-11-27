@@ -33,37 +33,25 @@ Sub fetchScores()
   Debug.Print "Browser ready."
 
   Set webpage = ie.document
+  Set mtbl = webpage.getElementsByTagName("table")
 
-  Set numTables = webpage.getElementsByClassName("score-cards") 
-  Debug.Print "Tables found:"
-  Debug.Print numTables.children().length()
+  Dim numGames As Integer
+  numGames = mtbl.length()
+  'Set table_data = mtbl.getElementsByTagName("tr")
 
-  Set mtbl = webpage.getElementsByTagName("table")(2) ' loop thru this for x many tables
-  Set table_data = mtbl.getElementsByTagName("tr")
-  Debug.Print "fetched", table_data.length(), "elements"
+  Debug.Print "fetched"; numGames; "elements"
+  
+  For Count = 1 To numGames
+    Debug.Print mtbl.Item(Count).innerText
+  Next Count   
+  
+  
   
   ' NOTE: this is all for one game.
   ' team name, q1,q2,q3,q4,total (5 elements)
-  Cells(1, 1) = table_data.Item(0).Children(0).innerText
-  Cells(1, 2) = table_data.Item(0).Children(1).innerText
-  Cells(1, 3) = table_data.Item(0).Children(2).innerText
-  Cells(1, 4) = table_data.Item(0).Children(3).innerText
-  Cells(1, 5) = table_data.Item(0).Children(4).innerText
-  Cells(1, 6) = table_data.Item(0).Children(5).innerText
+  'Cells(1, 1) = table_data.Item(0).Children(0).innerText
 
-  Cells(2, 1) = table_data.Item(1).Children(0).innerText
-  Cells(2, 2) = table_data.Item(1).Children(1).innerText
-  Cells(2, 3) = table_data.Item(1).Children(2).innerText
-  Cells(2, 4) = table_data.Item(1).Children(3).innerText
-  Cells(2, 5) = table_data.Item(1).Children(4).innerText
-  Cells(2, 6) = table_data.Item(1).Children(5).innerText
-
-  Cells(3, 1) = table_data.Item(2).Children(0).innerText
-  Cells(3, 2) = table_data.Item(2).Children(1).innerText
-  Cells(3, 3) = table_data.Item(2).Children(2).innerText
-  Cells(3, 4) = table_data.Item(2).Children(3).innerText
-  Cells(3, 5) = table_data.Item(2).Children(4).innerText
-  Cells(3, 6) = table_data.Item(2).Children(5).innerText
+  'Cells(1, 1) = table_data.Item(0).Children(0).innerText
   
   'Cells(itemNum, childNum + 1).Interior.Color = RGB(246, 174, 134)
   
