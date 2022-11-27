@@ -15,46 +15,59 @@ Sub fetchScores()
   ' 2) Microsoft HTML Object Library
   
   Dim ie As InternetExplorer
-  Dim pagePiece As Object
+  Dim mtbl, table_data As Object
   Dim webpage As HTMLDocument
 
   Const SCORES_URL = "https://www.cbssports.com/college-football/scoreboard/"
   
   Set ie = New InternetExplorer
-  ie.Visible = True 'Optional if you want to make the window visible
+  'ie.Visible = True 'Optional if you want to make the window visible
   
   ie.navigate (SCORES_URL)
-  Do While ie.readyState = 4: DoEvents: Loop
-  Do Until ie.readyState = 4: DoEvents: Loop
-  While ie.Busy
-    DoEvents
-  Wend
-  
+
+  Do
+  DoEvents
+  ' await webpage load (loop through nothing until ready)
+  Loop Until ie.readyState = READYSTATE_COMPLETE
+
+  Debug.Print "Browser ready."
+
   Set webpage = ie.document
-  Set mtbl = webpage.getElementsByTagName("Table")(1)
+
+  Set numTables = webpage.getElementsByClassName("score-cards") 
+  Debug.Print "Tables found:"
+  Debug.Print numTables.children().length()
+
+  Set mtbl = webpage.getElementsByTagName("table")(2) ' loop thru this for x many tables
   Set table_data = mtbl.getElementsByTagName("tr")
+  Debug.Print "fetched", table_data.length(), "elements"
   
-  On Error GoTo tryagain:
-  For itemNum = 1 To 240
-    For childNum = 0 To 5
-      Cells(itemNum, childNum + 1) = table_data.Item(itemNum).Children(childNum).innerText
-    Next childNum
-  Next itemNum
+  ' NOTE: this is all for one game.
+  ' team name, q1,q2,q3,q4,total (5 elements)
+  Cells(1, 1) = table_data.Item(0).Children(0).innerText
+  Cells(1, 2) = table_data.Item(0).Children(1).innerText
+  Cells(1, 3) = table_data.Item(0).Children(2).innerText
+  Cells(1, 4) = table_data.Item(0).Children(3).innerText
+  Cells(1, 5) = table_data.Item(0).Children(4).innerText
+  Cells(1, 6) = table_data.Item(0).Children(5).innerText
+
+  Cells(2, 1) = table_data.Item(1).Children(0).innerText
+  Cells(2, 2) = table_data.Item(1).Children(1).innerText
+  Cells(2, 3) = table_data.Item(1).Children(2).innerText
+  Cells(2, 4) = table_data.Item(1).Children(3).innerText
+  Cells(2, 5) = table_data.Item(1).Children(4).innerText
+  Cells(2, 6) = table_data.Item(1).Children(5).innerText
+
+  Cells(3, 1) = table_data.Item(2).Children(0).innerText
+  Cells(3, 2) = table_data.Item(2).Children(1).innerText
+  Cells(3, 3) = table_data.Item(2).Children(2).innerText
+  Cells(3, 4) = table_data.Item(2).Children(3).innerText
+  Cells(3, 5) = table_data.Item(2).Children(4).innerText
+  Cells(3, 6) = table_data.Item(2).Children(5).innerText
+  
+  'Cells(itemNum, childNum + 1).Interior.Color = RGB(246, 174, 134)
   
   ie.Quit
   Set ie = Nothing
-  Exit Sub
 
-  ' routine for error
-  tryagain:
-    Application.Wait Now + TimeValue("00:00:02")
-    errcount = errcount + 1
-    Debug.Print Err.Number & Err.Description
-    If errcount = 5 Then
-      MsgBox "We've detected " & errcount & " errors and we're going to pause the program so you can investigate.", , "Multiple errors detected"
-      Stop
-      errcount = 0
-    End If
-    Err.Clear
-  Resume
 End Sub
