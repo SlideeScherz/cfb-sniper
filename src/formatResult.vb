@@ -17,12 +17,12 @@ Sub formatWinners()
 
   'Defining and setting the format to be applied for each condition
   With winCondition
-    .Font.Color = vbGreen
+    .Font.Color = RGB(0,128,0)
     .Font.Bold = False
   End With
 
   With lossCondition
-    .Font.Color = vbRed
+    .Font.Color = RGB(150,0,0)
     .Font.Bold = False
   End With
 
