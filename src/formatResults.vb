@@ -21,7 +21,8 @@ Sub formatResults()
     'Use a Select Case statement to evaluate the formatting based on column 2
     Select Case textRng.Cells(N, 2).Value
       Case "TBD."
-        textRng.Cells(N, 1).Font.Color = vbGray
+        textRng.Cells(N, 1).Font.Color = RGB(0,0,0)
+        textRng.Cells(N, 1).Interior.Color = RGB(200,200,200)
       Case 0
         textRng.Cells(N, 1).Interior.Color = RGB(255,0,0)
       Case > 0
