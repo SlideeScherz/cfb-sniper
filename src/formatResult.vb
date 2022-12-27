@@ -6,26 +6,32 @@ Sub formatWinners()
   Dim winCondition As FormatCondition, lossCondition As FormatCondition
   
   'Fixing/Setting the range on which conditional formatting is to be desired
-  Set textRng = Worksheets("view").Range("E2:E43")
+  Set textRng = Worksheets("view").Range("D2:D43")
 
   'To delete/clear any existing conditional formatting from the range
   textRng.FormatConditions.Delete
 
-  'Defining and setting the criteria for each conditional format
-  Set lossCondition = textRng.FormatConditions.Add(xlCellValue, xlEqual, "=0")
-  Set winCondition = textRng.FormatConditions.Add(xlCellValue, xlGreater, "=0")
+  'Create variables to hold the number of rows for the tabular data
+  Dim RRow As Long, N As Long
 
-  With winCondition
-    .Interior.Color = RGB(0, 150, 0)
-    '.Font.Color = RGB(0,128,0)
-    .Font.Bold = False
-  End With
-
-  With lossCondition
-    .Interior.Color = RGB(200, 0, 0)
-    '.Font.Color = RGB(150,0,0)
-    .Font.Bold = False
-  End With
+  'Capture the number of rows within the tabular data range
+  RRow = textRng.Rows.Count
+  
+  'Iterate through all the rows in the tabular data range
+  For N = 1 To RRow
+      'Use a Select Case statement to evaluate the formatting based on column 2
+      Select Case textRng.Cells(N, 2).Value
+          'Turn the interior color to blue
+          Case 0
+          textRng.Cells(N, 1).Interior.Color = vbBlue
+          'Turn the interior color to red
+          Case > 0
+          textRng.Cells(N, 1).Interior.Color = vbRed
+          'Turn the interior color to green
+          Case "TBD."
+          textRng.Cells(N, 1).Interior.Color = vbGreen
+      End Select
+  Next N
 
 End Sub
 
